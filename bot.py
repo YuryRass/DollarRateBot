@@ -1,7 +1,12 @@
 import asyncio
 from aiogram import Bot, Dispatcher
-from handlers.user_handlers import router
+
 from config import settings
+from utils.main_menu import set_main_menu
+
+import handlers.other_handlers as other_hdrs
+import handlers.dollar_price as dollar_hdr
+import handlers.registry_user as reg_hdr
 
 
 async def main():
@@ -10,7 +15,12 @@ async def main():
         token=settings.BOT_TOKEN,
         parse_mode='HTML'
     )
-    dp.include_router(router)
+
+    dp.include_router(other_hdrs.router)
+    dp.include_router(dollar_hdr.router)
+    dp.include_router(reg_hdr.router)
+
+    await set_main_menu(bot)
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)

@@ -1,1 +1,2 @@
-from database.database import Base, bigint, engine
+from database.database import \
+    Base, bigint, engine, async_session
