@@ -1,3 +1,4 @@
+from math import ceil
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from database.models import DollarHistory
@@ -23,31 +24,39 @@ def get_history_keyboard(
     if len(histories) > PAGINATOR:
         if paginator == 0:
             kb_builder.row(
-                InlineKeyboardButton(
-                    text='▶️',
-                    callback_data=f'paginator_{paginator + 1}'
-                ),
-                width=1
+                _pages_statistic_btn(len(histories), paginator + 1),
+                _paginator_btn('▶️', paginator + 1),
+                width=2
             )
         elif len(histories) > PAGINATOR * (paginator + 1):
             kb_builder.row(
-                InlineKeyboardButton(
-                    text='◀️',
-                    callback_data=f'paginator_{paginator - 1}'
-                ),
-                InlineKeyboardButton(
-                    text='▶️',
-                    callback_data=f'paginator_{paginator + 1}'
-                ),
-                width=2
+                _paginator_btn('◀️', paginator - 1),
+                _pages_statistic_btn(len(histories), paginator + 1),
+                _paginator_btn('▶️', paginator + 1),
+                width=3
             )
         else:
             kb_builder.row(
-                InlineKeyboardButton(
-                    text='◀️',
-                    callback_data=f'paginator_{paginator - 1}'
-                ),
-                width=1
+                _paginator_btn('◀️', paginator - 1),
+                _pages_statistic_btn(len(histories), paginator + 1),
+                width=2
             )
 
     return kb_builder.as_markup()
+
+
+def _paginator_btn(text: str, paginator: int) -> InlineKeyboardButton:
+    return InlineKeyboardButton(
+        text=text,
+        callback_data=f'paginator_{paginator}'
+    )
+
+
+def _pages_statistic_btn(
+    len_records: int, paginator: int
+) -> InlineKeyboardButton:
+    return InlineKeyboardButton(
+        text=f'{paginator} / ' +
+        f'{ceil(len_records / PAGINATOR)}',
+        callback_data='not_call'
+    )
