@@ -4,7 +4,7 @@ from aiogram.filters import CommandStart, Command, StateFilter
 from aiogram.fsm.state import default_state
 
 from lexicon import LEXICON
-from utils.keyboards import get_main_keyboard
+from keyboards import get_main_keyboard
 from database.crud import add_user, is_user_registered
 
 

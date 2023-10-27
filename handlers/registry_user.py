@@ -6,7 +6,7 @@ from aiogram.filters import Command, StateFilter
 
 from filters import IsUserCommand
 from database.crud import is_user_registered, add_user_fullname
-from utils.checker import is_correct_fullname
+from utils.checker_fio import is_correct_fullname
 
 
 router: Router = Router()

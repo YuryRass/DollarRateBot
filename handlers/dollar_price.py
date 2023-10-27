@@ -3,15 +3,19 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.state import default_state
 from api_requests.request import DollarConverter
+from database.crud import save_dollar_price
 from filters import IsUserCommand
 
 
 router: Router = Router()
 
 
-async def show_dollar_rate(message: Message) -> None:
-    dollar_price: str = DollarConverter.get_price()
-    await message.answer(
+async def show_dollar_rate(info: Message | CallbackQuery) -> None:
+    dollar_price: float = DollarConverter.get_price()
+    await save_dollar_price(info.from_user.id, dollar_price)
+    if isinstance(info, CallbackQuery):
+        info = info.message
+    await info.answer(
         text=f'Курс доллара: {dollar_price} руб.'
     )
 
@@ -26,4 +30,4 @@ async def get_dollar_price_command(message: Message):
 )
 async def get_dollar_price(callback: CallbackQuery):
     await callback.answer()
-    await show_dollar_rate(callback.message)
+    await show_dollar_rate(callback)
