@@ -15,6 +15,7 @@ class Users(Base):
 
     histories: Mapped[list["DollarHistory"]] = relationship(
         back_populates="user", cascade="all, delete, delete-orphan",
+        lazy='selectin'
     )
 
 
@@ -29,7 +30,7 @@ class DollarHistory(Base):
         nullable=False
     )
     date_time: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow(), nullable=False
+        DateTime, nullable=False
     )
     cost_value: Mapped[float] = mapped_column(nullable=False)
 

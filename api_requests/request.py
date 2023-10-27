@@ -7,15 +7,15 @@ from config import settings
 class DollarConverter:
     """Курс доллара"""
     @staticmethod
-    def get_price() -> str:
+    def get_price() -> float:
         """Возвращает курс доллара в рублях
 
         Returns:
-            str: число рублей
+            float: число рублей
         """
         payload: dict[str, str] = {'fsym': 'USD', 'tsyms': 'RUB'}
         response: Response = requests.get(
             url=settings.URL, params=payload
         )
         price = response.json()
-        return price['RUB']
+        return float(price['RUB'])
