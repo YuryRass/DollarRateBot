@@ -5,6 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     BOT_TOKEN: str
+    PAYMENTS_TOKEN: str
     URL: HttpUrl  # адрес API с курсом валют
 
     # PostgreSQL

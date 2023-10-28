@@ -11,7 +11,7 @@ router: Router = Router()
 
 
 async def show_dollar_rate(info: Message | CallbackQuery) -> None:
-    dollar_price: float = DollarConverter.get_price()
+    dollar_price: float = await DollarConverter.get_price()
     await save_dollar_price(info.from_user.id, dollar_price)
     if isinstance(info, CallbackQuery):
         info = info.message
