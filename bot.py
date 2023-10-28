@@ -12,7 +12,7 @@ import handlers.user_subscription as subscr_hdr
 import handlers.cancel_subscription as cancel_hdr
 import handlers.delete_account as del_account_hdr
 
-from database.crud import create_tables
+from database import create_tables
 
 
 async def main():

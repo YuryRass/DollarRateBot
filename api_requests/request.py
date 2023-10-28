@@ -8,6 +8,11 @@ class DollarConverter:
 
     @staticmethod
     async def get_price() -> float:
+        """Получение курса доллара на текущий момент
+
+        Returns:
+            float: кол-во рублей в 1 долларе
+        """
         payload: dict[str, str] = {'fsym': 'USD', 'tsyms': 'RUB'}
         async with ClientSession() as session:
             async with session.get(

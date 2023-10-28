@@ -1,3 +1,4 @@
+"""Модуль для создания подключения к БД"""
 from typing_extensions import Annotated
 from sqlalchemy import BigInteger
 from sqlalchemy.orm import DeclarativeBase
@@ -22,3 +23,9 @@ class Base(DeclarativeBase):
     type_annotation_map = {
         bigint: BigInteger()
     }
+
+
+async def create_tables() -> None:
+    """Создание таблиц БД"""
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)

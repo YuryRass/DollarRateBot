@@ -2,7 +2,7 @@ from aiogram import Router
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup
 from aiogram.filters import Command
 
-from database.crud import add_subscription, is_user_subscribed
+from database import UserCrud
 from keyboards import get_yes_no_keyboard
 
 
@@ -11,7 +11,7 @@ router: Router = Router()
 
 @router.message(Command(commands='cancel_subscr'))
 async def cancel_subscr_command(message: Message):
-    if not await is_user_subscribed(message.from_user.id):
+    if not await UserCrud.is_user_subscribed(message.from_user.id):
         await message.answer(
             text='У вас нет подписки, чтобы ее удалить!\n' +
             'Оформить подписку - /subscribe'
@@ -34,7 +34,7 @@ async def user_answer(callback: CallbackQuery):
             text='Ну и правильно! Подписка у Вас остается 😊'
         )
     else:
-        await add_subscription(callback.from_user.id, False)
+        await UserCrud.add_subscription(callback.from_user.id, False)
         await callback.message.answer(
             text='Подписка на каждодневное оповещение о курсе доллара удалена'
         )

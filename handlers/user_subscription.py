@@ -7,10 +7,7 @@ from aiogram.fsm.state import default_state
 from aiogram.filters import Command, StateFilter
 
 from filters import IsUserCommand, IsUserSubscribed
-from database.crud import (
-    add_subscription, is_user_registered,
-    is_user_subscribed, save_dollar_price
-)
+from database import UserCrud
 from api_requests import DollarConverter
 from config import settings
 
@@ -28,12 +25,12 @@ async def _user_subscription(info: Message | CallbackQuery):
     user_tg_id: int = info.from_user.id
     if isinstance(info, CallbackQuery):
         info = info.message
-    if await is_user_subscribed(user_tg_id):
+    if await UserCrud.is_user_subscribed(user_tg_id):
         await info.answer(
             text='У вас уже есть подписка!'
         )
         return
-    if not await is_user_registered(user_tg_id):
+    if not await UserCrud.is_user_registered(user_tg_id):
         await info.answer(
             text='Вы не зарегистрированы!\n' +
             'Для регистрации используйте /registry'
@@ -78,13 +75,13 @@ async def successful_payment(message: Message):
         'Теперь Вам будут приходить оповещения о курсе доллара каждый день\n' +
         '/begin - начать оповещения'
     )
-    await add_subscription(message.from_user.id)
+    await UserCrud.add_subscription(message.from_user.id)
 
 
 @router.message(IsUserSubscribed())
 async def regular_dollar_rate(message: Message):
     while True:
-        if not await is_user_subscribed(message.from_user.id):
+        if not await UserCrud.is_user_subscribed(message.from_user.id):
             break
         dollar_price: float = await DollarConverter.get_price()
         await message.answer(
@@ -92,7 +89,7 @@ async def regular_dollar_rate(message: Message):
             'Следующее оповещение будет через 24 часа ' +
             f'в {datetime.now().strftime("%H:%M")}'
         )
-        await save_dollar_price(message.from_user.id, dollar_price)
+        await UserCrud.save_dollar_price(message.from_user.id, dollar_price)
 
         # засыпаем на сутки
         await asyncio.sleep(DAY)

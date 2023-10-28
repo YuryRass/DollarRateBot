@@ -5,7 +5,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.filters import Command, StateFilter
 
 from filters import IsUserCommand
-from database.crud import is_user_registered, add_user_fullname
+from database import UserCrud
 from utils.checker_fio import is_correct_fullname
 
 
@@ -17,7 +17,7 @@ class UserStates(StatesGroup):
 
 
 async def _user_registry(message: Message, state: FSMContext):
-    user_reg: bool = await is_user_registered(message.from_user.id)
+    user_reg: bool = await UserCrud.is_user_registered(message.from_user.id)
     if user_reg:
         await message.answer(
             text='Вы уже зарегистрированы!',
@@ -47,7 +47,7 @@ async def user_registry(callback: CallbackQuery, state: FSMContext):
 async def input_full_name(message: Message, state: FSMContext):
     full_name: str = message.text
     if is_correct_fullname(full_name):
-        await add_user_fullname(message.from_user.id, full_name)
+        await UserCrud.add_user_fullname(message.from_user.id, full_name)
         await message.answer(
             text='Поздравляю! Теперь Вы зарегестрированы и ' +
             'можете оформить подписку, чтобы получать оповещения о курсе ' +

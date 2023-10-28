@@ -3,7 +3,7 @@ from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.state import default_state
 
-from database.crud import get_user_history
+from database import UserCrud
 from filters import IsPaginatorBtn, IsUserCommand, IsNotCallBack
 from database.models import DollarHistory
 from keyboards import get_history_keyboard
@@ -14,7 +14,7 @@ router: Router = Router()
 
 async def _get_user_history(info: Message | CallbackQuery):
     histories: list[DollarHistory] = \
-        await get_user_history(info.from_user.id)
+        await UserCrud.get_user_history(info.from_user.id)
 
     history_kb: InlineKeyboardMarkup = get_history_keyboard(histories)
 
@@ -42,7 +42,7 @@ async def show_user_history(callback: CallbackQuery):
 @router.callback_query(IsPaginatorBtn())
 async def paginate_pages(callback: CallbackQuery, paginator: int):
     histories: list[DollarHistory] = \
-        await get_user_history(callback.from_user.id)
+        await UserCrud.get_user_history(callback.from_user.id)
 
     history_kb: InlineKeyboardMarkup = \
         get_history_keyboard(histories, paginator)

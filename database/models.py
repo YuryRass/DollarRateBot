@@ -1,6 +1,10 @@
+"""Описание таблиц БД"""
+
 from datetime import datetime
+
 from sqlalchemy import ForeignKey, DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from database import Base, bigint
 
 

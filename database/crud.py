@@ -1,131 +1,104 @@
 from datetime import datetime
-from sqlalchemy import and_, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from database import Base, engine
 from database.models import Users, DollarHistory
 from database import async_session
 
 
-async def create_tables() -> None:
-    """Создание таблиц БД"""
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+class BaseCrud:
+    model = None
 
+    @classmethod
+    async def find_one_or_none(cls, **filter_by):
+        query = select(cls.model).filter_by(**filter_by)
+        async with async_session() as session:
+            res = await session.execute(query)
+            return res.mappings().one_or_none()
 
-async def is_user_exist(user_tg_id: int) -> bool:
-    query = select(Users).where(Users.telegram_id == user_tg_id)
-    session: AsyncSession
-    async with async_session() as session:
-        res = await session.execute(query)
-        return res.scalar() is not None
-
-
-async def is_user_registered(user_tg_id: int) -> bool:
-    registered_user_query = (
-        select(Users).
-        where(
-            and_(
-                Users.telegram_id == user_tg_id,
-                Users.full_name.is_not(None)
-            )
-        )
-    )
-    session: AsyncSession
-    async with async_session() as session:
-        res = await session.execute(registered_user_query)
-        return res.scalar_one_or_none()
-
-
-async def add_user(user_tg_id: int) -> None:
-    if not await is_user_exist(user_tg_id):
-        user: Users = Users(telegram_id=user_tg_id)
+    @classmethod
+    async def add(cls, object: Users):
         session: AsyncSession
         async with async_session() as session:
-            session.add(user)
+            session.add(object)
             await session.commit()
 
 
-async def add_user_fullname(user_tg_id: int, full_name: str) -> None:
+class UserCrud(BaseCrud):
+    model = Users
 
-    user_query = (
-        select(Users).
-        where(Users.telegram_id == user_tg_id)
-    )
-    session: AsyncSession
-    async with async_session() as session:
-        res = await session.execute(user_query)
-        user: Users = res.scalar_one()
-        user.full_name = full_name
-        await session.commit()
-
-
-async def save_dollar_price(user_tg_id: int, dollar_price: float) -> None:
-    user_query = (
-        select(Users).
-        where(Users.telegram_id == user_tg_id)
-    )
-    session: AsyncSession
-    async with async_session() as session:
-        res = await session.execute(user_query)
-        user: Users = res.scalar_one()
-        history: DollarHistory = DollarHistory(
-            date_time=datetime.now(),
-            cost_value=dollar_price
-        )
-        user.histories.append(history)
-        await session.commit()
-
-
-async def get_user_history(user_tg_id: int) -> list[DollarHistory]:
-    query = (
-        select(Users).
-        where(Users.telegram_id == user_tg_id)
-    )
-    session: AsyncSession
-    async with async_session() as session:
-        res = await session.execute(query)
-        user: Users = res.scalar_one()
-        return user.histories
-
-
-async def add_subscription(user_tg_id: int, is_subscribe: bool = True) -> None:
-    query = (
-        select(Users).
-        where(Users.telegram_id == user_tg_id)
-    )
-    session: AsyncSession
-    async with async_session() as session:
-        res = await session.execute(query)
-        user: Users = res.scalar_one()
-        user.is_subscribe = is_subscribe
-        await session.commit()
-
-
-async def is_user_subscribed(user_tg_id: int) -> bool:
-    query = (
-        select(Users).
-        where(
-            and_(
-                Users.telegram_id == user_tg_id,
-                Users.is_subscribe.is_(True)
-            )
-        )
-    )
-    session: AsyncSession
-    async with async_session() as session:
-        res = await session.execute(query)
-        user: Users | None = res.scalar_one_or_none()
+    @classmethod
+    async def is_user_exist(cls, user_tg_id: int) -> bool:
+        user: Users | None = \
+            await cls.find_one_or_none(telegram_id=user_tg_id)
         return user is not None
 
+    @classmethod
+    async def is_user_registered(cls, user_tg_id: int) -> bool:
+        not_registered_user_query: Users | None = \
+            await cls.find_one_or_none(
+                telegram_id=user_tg_id,
+                full_name=None
+            )
+        return not_registered_user_query is not None
 
-async def delete_account(user_tg_id: int) -> None:
-    user_query = (
-        select(Users).
-        where(Users.telegram_id == user_tg_id)
-    )
-    async with async_session() as session:
-        res = await session.execute(user_query)
-        user: Users = res.scalar_one()
+    @classmethod
+    async def add_user(cls, user_tg_id: int) -> None:
+        if not await cls.is_user_exist(user_tg_id):
+            user: Users = Users(telegram_id=user_tg_id)
+            await cls.add(user)
+
+    @classmethod
+    async def add_user_fullname(cls, user_tg_id: int, full_name: str) -> None:
+        user: Users = \
+            await cls.find_one_or_none(telegram_id=user_tg_id)
+        user.full_name = full_name
+        await cls.add(user)
+
+    @classmethod
+    async def save_dollar_price(
+        cls, user_tg_id: int, dollar_price: float
+    ) -> None:
+        user: Users = \
+            await cls.find_one_or_none(telegram_id=user_tg_id)
+        user.histories.append(
+            DollarHistory(
+                date_time=datetime.now(),
+                cost_value=dollar_price
+            )
+        )
+        await cls.add(user)
+
+    @classmethod
+    async def get_user_history(cls, user_tg_id: int) -> list[DollarHistory]:
+        user: Users = \
+            await cls.find_one_or_none(telegram_id=user_tg_id)
+
+        return user.histories
+
+    @classmethod
+    async def add_subscription(
+        cls, user_tg_id: int, is_subscribe: bool = True
+    ) -> None:
+        user: Users = \
+            await cls.find_one_or_none(telegram_id=user_tg_id)
+        user.is_subscribe = is_subscribe
+
+        await cls.add(user)
+
+    @classmethod
+    async def is_user_subscribed(cls, user_tg_id: int) -> bool:
+        user: Users | None = \
+            await cls.find_one_or_none(
+                telegram_id=user_tg_id,
+                is_subscribe=True
+            )
+        return user is not None
+
+    @classmethod
+    async def delete_account(cls, user_tg_id: int) -> None:
+        user: Users = \
+            await cls.find_one_or_none(telegram_id=user_tg_id)
         user.full_name = None
         user.is_subscribe = False
-        await session.commit()
+
+        await cls.add(user)
