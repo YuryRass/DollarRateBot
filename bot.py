@@ -9,6 +9,7 @@ import handlers.dollar_price as dollar_hdr
 import handlers.registry_user as reg_hdr
 import handlers.user_history as history_hdr
 import handlers.user_subscription as subscr_hdr
+import handlers.cancel_subscription as cancel_hdr
 
 from database.crud import create_tables
 
@@ -26,6 +27,7 @@ async def main():
     dp.include_router(reg_hdr.router)
     dp.include_router(history_hdr.router)
     dp.include_router(subscr_hdr.router)
+    dp.include_router(cancel_hdr.router)
 
     await set_main_menu(bot)
 
