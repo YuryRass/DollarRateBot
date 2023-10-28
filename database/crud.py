@@ -59,7 +59,7 @@ async def add_user_fullname(user_tg_id: int, full_name: str) -> None:
         await session.commit()
 
 
-async def save_dollar_price(user_tg_id: int, dollar_price: float):
+async def save_dollar_price(user_tg_id: int, dollar_price: float) -> None:
     user_query = (
         select(Users).
         where(Users.telegram_id == user_tg_id)
@@ -86,3 +86,46 @@ async def get_user_history(user_tg_id: int) -> list[DollarHistory]:
         res = await session.execute(query)
         user: Users = res.scalar_one()
         return user.histories
+
+
+async def add_subscription(user_tg_id: int, is_subscribe: bool = True) -> None:
+    query = (
+        select(Users).
+        where(Users.telegram_id == user_tg_id)
+    )
+    session: AsyncSession
+    async with async_session() as session:
+        res = await session.execute(query)
+        user: Users = res.scalar_one()
+        user.is_subscribe = is_subscribe
+        await session.commit()
+
+
+async def is_user_subscribed(user_tg_id: int) -> bool:
+    query = (
+        select(Users).
+        where(
+            and_(
+                Users.telegram_id == user_tg_id,
+                Users.is_subscribe.is_(True)
+            )
+        )
+    )
+    session: AsyncSession
+    async with async_session() as session:
+        res = await session.execute(query)
+        user: Users | None = res.scalar_one_or_none()
+        return user is not None
+
+
+async def delete_account(user_tg_id: int) -> None:
+    user_query = (
+        select(Users).
+        where(Users.telegram_id == user_tg_id)
+    )
+    async with async_session() as session:
+        res = await session.execute(user_query)
+        user: Users = res.scalar_one()
+        user.full_name = None
+        user.is_subscribe = False
+        await session.commit()

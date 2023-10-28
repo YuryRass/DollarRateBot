@@ -12,6 +12,7 @@ class Users(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     telegram_id: Mapped[bigint] = mapped_column(nullable=False, unique=True)
     full_name: Mapped[str] = mapped_column(String(120), nullable=True)
+    is_subscribe: Mapped[bool] = mapped_column(default=False)
 
     histories: Mapped[list["DollarHistory"]] = relationship(
         back_populates="user", cascade="all, delete, delete-orphan",
