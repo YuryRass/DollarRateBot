@@ -28,12 +28,12 @@ async def _delete_account(info: Message | CallbackQuery, state: FSMContext):
     await state.set_state(state=UserStates.delete_account)
 
 
-@router.message(Command(commands='unregistry'), StateFilter(default_state))
+@router.message(Command(commands='unregister'), StateFilter(default_state))
 async def delete_account_command(message: Message, state: FSMContext):
     await _delete_account(message, state)
 
 
-@router.callback_query(IsUserCommand('unregistry'), StateFilter(default_state))
+@router.callback_query(IsUserCommand('unregister'), StateFilter(default_state))
 async def del_account(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     await _delete_account(callback, state)

@@ -18,7 +18,7 @@ class UserStates(StatesGroup):
     full_name = State()
 
 
-async def _user_registry(info: Message | CallbackQuery, state: FSMContext):
+async def _user_register(info: Message | CallbackQuery, state: FSMContext):
     user_reg: bool = await UserCrud.is_user_registered(info.from_user.id)
     if isinstance(info, CallbackQuery):
         info = info.message
@@ -34,17 +34,17 @@ async def _user_registry(info: Message | CallbackQuery, state: FSMContext):
         await state.set_state(state=UserStates.full_name)
 
 
-@router.message(Command(commands='registry'), StateFilter(default_state))
-async def user_registry_command(message: Message, state: FSMContext):
-    await _user_registry(message, state)
+@router.message(Command(commands='register'), StateFilter(default_state))
+async def user_register_command(message: Message, state: FSMContext):
+    await _user_register(message, state)
 
 
 @router.callback_query(
-    IsUserCommand(command='registry'), StateFilter(default_state)
+    IsUserCommand(command='register'), StateFilter(default_state)
 )
 async def user_registry(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    await _user_registry(callback, state)
+    await _user_register(callback, state)
 
 
 @router.message(StateFilter(UserStates.full_name))
@@ -59,6 +59,6 @@ async def input_full_name(message: Message, state: FSMContext):
         )
     else:
         await message.answer(
-            text='ФИО введены некорректно! Попробуйте еще раз /registry',
+            text='ФИО введены некорректно! Попробуйте еще раз /register',
         )
     await state.clear()

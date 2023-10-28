@@ -79,7 +79,7 @@ class UserCrud(BaseCrud):
 
     @classmethod
     async def add_user_fullname(cls, user_tg_id: int, full_name: str) -> None:
-        """Добавляет ФИО пользователя в таблицу
+        """Добавляет ФИО пользователя в таблицу после регистрации
 
         Args:
             user_tg_id (int): Telegram ID пользователя

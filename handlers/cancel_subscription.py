@@ -48,6 +48,6 @@ async def user_answer(callback: CallbackQuery, state: FSMContext):
     else:
         await UserCrud.add_subscription(callback.from_user.id, False)
         await callback.message.answer(
-            text='Подписка на каждодневное оповещение о курсе доллара удалена'
+            text='Подписка на ежедневное оповещение о курсе доллара отменена'
         )
     await state.clear()
