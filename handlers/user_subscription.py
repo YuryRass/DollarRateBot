@@ -11,7 +11,7 @@ from database.crud import (
     add_subscription, is_user_registered,
     is_user_subscribed, save_dollar_price
 )
-from api_requests.request import DollarConverter
+from api_requests import DollarConverter
 from config import settings
 
 DAY = 24 * 60 * 60

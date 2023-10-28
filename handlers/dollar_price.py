@@ -2,7 +2,7 @@ from aiogram import Router
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.state import default_state
-from api_requests.request import DollarConverter
+from api_requests import DollarConverter
 from database.crud import save_dollar_price
 from filters import IsUserCommand
 
