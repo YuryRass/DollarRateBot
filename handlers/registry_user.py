@@ -16,14 +16,16 @@ class UserStates(StatesGroup):
     full_name = State()
 
 
-async def _user_registry(message: Message, state: FSMContext):
-    user_reg: bool = await UserCrud.is_user_registered(message.from_user.id)
+async def _user_registry(info: Message | CallbackQuery, state: FSMContext):
+    user_reg: bool = await UserCrud.is_user_registered(info.from_user.id)
+    if isinstance(info, CallbackQuery):
+        info = info.message
     if user_reg:
-        await message.answer(
+        await info.answer(
             text='Вы уже зарегистрированы!',
         )
     else:
-        await message.answer(
+        await info.answer(
             text='Для регистрации введите свои ФИО\n' +
             'Например: Иванов Иван Иванович',
         )
@@ -40,7 +42,7 @@ async def user_registry_command(message: Message, state: FSMContext):
 )
 async def user_registry(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    await _user_registry(callback.message, state)
+    await _user_registry(callback, state)
 
 
 @router.message(StateFilter(UserStates.full_name))

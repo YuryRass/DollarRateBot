@@ -13,7 +13,7 @@ class BaseCrud:
         query = select(cls.model).filter_by(**filter_by)
         async with async_session() as session:
             res = await session.execute(query)
-            return res.mappings().one_or_none()
+            return res.scalar_one_or_none()
 
     @classmethod
     async def add(cls, object: Users):
@@ -34,12 +34,11 @@ class UserCrud(BaseCrud):
 
     @classmethod
     async def is_user_registered(cls, user_tg_id: int) -> bool:
-        not_registered_user_query: Users | None = \
+        user: Users = \
             await cls.find_one_or_none(
-                telegram_id=user_tg_id,
-                full_name=None
+                telegram_id=user_tg_id
             )
-        return not_registered_user_query is not None
+        return user.full_name is not None
 
     @classmethod
     async def add_user(cls, user_tg_id: int) -> None:

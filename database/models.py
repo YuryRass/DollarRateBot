@@ -20,7 +20,7 @@ class Users(Base):
 
     histories: Mapped[list["DollarHistory"]] = relationship(
         back_populates="user", cascade="all, delete, delete-orphan",
-        lazy='selectin'
+        lazy='selectin',
     )
 
 
