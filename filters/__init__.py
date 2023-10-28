@@ -1,1 +1,2 @@
-from filters.filters import IsUserCommand, IsPaginatorBtn, IsNotCallBack
+from filters.filters import \
+    IsUserCommand, IsPaginatorBtn, IsNotCallBack, IsUserSubscribed

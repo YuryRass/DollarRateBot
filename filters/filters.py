@@ -1,5 +1,7 @@
 from aiogram.filters import BaseFilter
-from aiogram.types import CallbackQuery
+from aiogram.types import CallbackQuery, Message
+
+from database.crud import is_user_subscribed
 
 
 class IsUserCommand(BaseFilter):
@@ -23,3 +25,9 @@ class IsPaginatorBtn(BaseFilter):
 class IsNotCallBack(BaseFilter):
     async def __call__(self, callback: CallbackQuery) -> bool:
         return callback.data == 'not_call'
+
+
+class IsUserSubscribed(BaseFilter):
+    async def __call__(self, message: Message) -> bool:
+        return message.text == '/begin' and \
+            await is_user_subscribed(message.from_user.id)
