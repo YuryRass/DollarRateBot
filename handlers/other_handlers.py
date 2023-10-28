@@ -27,7 +27,7 @@ async def command_start(message: Message):
     else:  # противоположная замена
         main_keyboard = get_main_keyboard()
     await message.answer(
-        text=f'<b>Привет, {message.from_user.full_name}!</b>\n\n' +
+        text=f'<b>Рад Вас видеть, {message.from_user.full_name}!</b>\n\n' +
         LEXICON['/start'],
         reply_markup=main_keyboard,
     )
