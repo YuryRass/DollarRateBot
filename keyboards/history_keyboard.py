@@ -1,3 +1,5 @@
+"""Telegram inline клавиатура, выводящая инфу о пользоватльских запросах"""
+
 from math import ceil
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -9,6 +11,17 @@ PAGINATOR = 7
 def get_history_keyboard(
     histories: list[DollarHistory], paginator: int = 0
 ) -> InlineKeyboardMarkup:
+    """Возвращает клавиатуру с историей пользовательских запросов
+    о курсе доллара
+
+    Args:
+        histories (list[DollarHistory]): история запросов
+        paginator (int, optional): id текущей страницы с данными.
+    Defaults to 0.
+
+    Returns:
+        InlineKeyboardMarkup
+    """
     kb_builder: InlineKeyboardBuilder = InlineKeyboardBuilder()
     buttons: list[InlineKeyboardButton] = [
         InlineKeyboardButton(

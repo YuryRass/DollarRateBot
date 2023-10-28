@@ -1,3 +1,5 @@
+"""Значение курса доллара (в рублях)"""
+
 from aiogram import Router
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command, StateFilter

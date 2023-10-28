@@ -1,3 +1,5 @@
+"""Фильтры, накладывающиеся роутеры"""
+
 from aiogram.filters import BaseFilter
 from aiogram.types import CallbackQuery, Message
 

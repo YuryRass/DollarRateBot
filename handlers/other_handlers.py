@@ -1,3 +1,5 @@
+"""Обработка команд /start и /help"""
+
 from aiogram import Router
 from aiogram.types import Message, InlineKeyboardMarkup
 from aiogram.filters import CommandStart, Command, StateFilter

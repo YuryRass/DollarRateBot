@@ -1,4 +1,5 @@
-"""Модуль для создания подключения к БД"""
+"""Модуль для создания ассинхронного подключения к БД"""
+
 from typing_extensions import Annotated
 from sqlalchemy import BigInteger
 from sqlalchemy.orm import DeclarativeBase

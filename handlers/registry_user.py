@@ -1,3 +1,5 @@
+"""Регистрация пользователя"""
+
 from aiogram import Router
 from aiogram.types import CallbackQuery, Message
 from aiogram.fsm.state import StatesGroup, State, default_state

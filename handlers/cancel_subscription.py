@@ -1,3 +1,5 @@
+"""Отмена подписки"""
+
 from aiogram import Router
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup
 from aiogram.filters import Command, StateFilter

@@ -1,3 +1,5 @@
+"""История пользовательских запросов о курсах доллара"""
+
 from aiogram import Router
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup
 from aiogram.filters import Command, StateFilter

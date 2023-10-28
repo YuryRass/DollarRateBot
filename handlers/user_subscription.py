@@ -1,3 +1,6 @@
+"""
+    Подписка пользователя на каждодневное получении информации о курсе доллара
+"""
 import asyncio
 from datetime import datetime
 from aiogram import Router, F
