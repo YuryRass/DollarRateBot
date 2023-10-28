@@ -50,7 +50,8 @@ async def input_full_name(message: Message, state: FSMContext):
         await add_user_fullname(message.from_user.id, full_name)
         await message.answer(
             text='Поздравляю! Теперь Вы зарегестрированы и ' +
-            'можете получать значения курса доллара с выбранной периодичностью'
+            'можете оформить подписку, чтобы получать оповещения о курсе ' +
+            'доллара каждый день - /subscribe'
         )
     else:
         await message.answer(

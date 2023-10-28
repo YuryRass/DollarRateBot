@@ -6,7 +6,7 @@ from aiogram.fsm.state import default_state
 from database.crud import get_user_history
 from filters import IsPaginatorBtn, IsUserCommand, IsNotCallBack
 from database.models import DollarHistory
-from keyboards.history_keyboard import get_history_keyboard
+from keyboards import get_history_keyboard
 
 
 router: Router = Router()
