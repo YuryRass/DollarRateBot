@@ -93,6 +93,6 @@ docker-compose up --build
 
 Расширение базы Telegram пользователей до 100 000 аккаунтов возможно с применением [Local Bot API Server](https://core.telegram.org/bots/api#using-a-local-bot-api-server)
 
-После установки утилиты `telegram-bot-api` необходимо её запустить (без передачи аргументов). Заранее проинициализировав переменные окружения **TELEGRAM_API_ID** и **TELEGRAM_API_HASH** значениями, которые получились [здесь](https://my.telegram.org/auth?to=apps)
+После установки утилиты `telegram-bot-api` необходимо её запустить (без передачи аргументов), заранее проинициализировав переменные окружения **TELEGRAM_API_ID** и **TELEGRAM_API_HASH** значениями, которые получились [здесь](https://my.telegram.org/auth?to=apps)
 
 После выполнения команды `telegram-bot-api` запустится локальной **API Bot Server** по адресу http://localhost:8081
