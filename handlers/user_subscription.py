@@ -1,5 +1,5 @@
 """
-    Подписка пользователя на каждодневное получении информации о курсе доллара
+    Подписка пользователя на ежедневное получение информации о курсе доллара
 """
 import asyncio
 from datetime import datetime
@@ -21,7 +21,7 @@ router: Router = Router()
 PRICE = LabeledPrice(
     label="Подписка на 1 месяц",
     amount=100*100
-)  # в копейках (руб)
+)  # 100 руб.
 
 
 async def _user_subscription(info: Message | CallbackQuery):
