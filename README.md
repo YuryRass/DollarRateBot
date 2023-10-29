@@ -55,6 +55,8 @@ Telegram пользователь имеет возможность оформи
   > Пароль для пользователя в PostgreSQL
 * **DB_NAME** = dollar_rate
   > Имя базы данных PostgreSQL
+* **CUSTOM_BOT_API** = http://localhost:8081
+  > URL адрес, где будет запущен [Local Bot API Server](ttps://core.telegram.org/bots/api#using-a-local-bot-api-server)
 
 # Установка и запуск
 ## Локальный сервер
@@ -90,3 +92,7 @@ docker-compose up --build
 # Способы расширения базы Telegram пользователей
 
 Расширение базы Telegram пользователей до 100 000 аккаунтов возможно с применением [Local Bot API Server](https://core.telegram.org/bots/api#using-a-local-bot-api-server)
+
+После установки утилиты `telegram-bot-api` необходимо её запустить (без передачи аргументов). Заранее проинициализировав переменные окружения **TELEGRAM_API_ID** и **TELEGRAM_API_HASH** значениями, которые получились [здесь](https://my.telegram.org/auth?to=apps)
+
+После выполнения команды `telegram-bot-api` запустится локальной **API Bot Server** по адресу http://localhost:8081

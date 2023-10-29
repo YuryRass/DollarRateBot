@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     DB_PASS: str
     DB_NAME: str
 
+    # http://localhost:8081
+    CUSTOM_BOT_API: str | None
+
     @property
     def DATABASE_URL(self):
         """Адрес PostgreSQL базы данных"""
