@@ -5,12 +5,12 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from lexicon import LEXICON
 
 
-def get_main_keyboard(extra_btn: str = 'unregistry') -> InlineKeyboardMarkup:
+def get_main_keyboard(extra_btn: str = 'unregister') -> InlineKeyboardMarkup:
     """Возвращает главную клавиатуру (команда /start)
 
     Args:
         extra_btn (str, optional): кнопки, которые не должны быть на клаве.
-    Defaults to 'unregistry'.
+    Defaults to 'unregister'.
 
     Returns:
         InlineKeyboardMarkup

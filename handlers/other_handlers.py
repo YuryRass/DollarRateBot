@@ -23,7 +23,7 @@ async def command_start(message: Message):
     # если пользователь уже зареган, то заменяем
     # клавишу |Зарегистрироваться| на |Удалить аккаунт|
     if await UserCrud.is_user_registered(message.from_user.id):
-        main_keyboard = get_main_keyboard('registry')
+        main_keyboard = get_main_keyboard('register')
     else:  # противоположная замена
         main_keyboard = get_main_keyboard()
     await message.answer(
