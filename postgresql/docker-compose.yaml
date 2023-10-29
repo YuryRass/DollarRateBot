@@ -1,0 +1,18 @@
+version: '3'
+services:
+
+  db:
+    image: postgres
+    container_name: db
+    ports:
+      - ${HOST_PORT}:${PSQL_PORT}
+    environment:
+      - POSTGRES_USER=${PSQL_USER}
+      - POSTGRES_PASSWORD=${PSQL_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - psqldata:/var/lib/postgresql/data
+
+volumes:
+  psqldata:
+    driver: local
