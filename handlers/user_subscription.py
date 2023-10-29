@@ -36,7 +36,7 @@ async def _user_subscription(info: Message | CallbackQuery):
     if not await UserCrud.is_user_registered(user_tg_id):
         await info.answer(
             text='Вы не зарегистрированы!\n' +
-            'Для регистрации используйте /registry'
+            'Для регистрации используйте /register'
         )
         return
     if settings.PAYMENTS_TOKEN.split(':')[1] == 'TEST':
