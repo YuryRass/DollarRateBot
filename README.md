@@ -63,7 +63,7 @@ pip3 install -r requirements.txt
 
 Перед запуском Телеграм-бота у вас должна быть база данных PostgreSQL с названием **DB_NAME**
 
-Если у Вас нет базы данных PostgreSQL, то можно создать и запустить её в docker-контейнере, предварительно заполнив файл `postgresql/.env`
+Если у Вас нет базы данных PostgreSQL, то можно создать и запустить её в docker-контейнере, предварительно заполнив файл `./postgresql/.env`
 ```
 docker-compose -f postgresql/docker-compose.yaml up --build
 ```
