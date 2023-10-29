@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  bot:
+    image: bot_image
+    build:
+      context: .
+    container_name: bot
+    env_file:
+      - .env.docker
+    restart: unless-stopped
+    depends_on:
+      - db
+  db:
+    container_name: db
+    ports:
+      - '1234:5432'
+    env_file:
+      - .env.docker
+    image: postgres
+    volumes:
+      - postgresdata:/var/lib/postgresql/data
+
+volumes:
+  postgresdata:
+    driver: local
