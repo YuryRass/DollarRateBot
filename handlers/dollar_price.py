@@ -17,19 +17,15 @@ async def show_dollar_rate(info: Message | CallbackQuery) -> None:
     await UserCrud.save_dollar_price(info.from_user.id, dollar_price)
     if isinstance(info, CallbackQuery):
         info = info.message
-    await info.answer(
-        text=f'Курс доллара: {dollar_price} руб.'
-    )
+    await info.answer(text=f"Курс доллара: {dollar_price} руб.")
 
 
-@router.message(Command(commands='dollar'), StateFilter(default_state))
+@router.message(Command(commands="dollar"), StateFilter(default_state))
 async def get_dollar_price_command(message: Message):
     await show_dollar_rate(message)
 
 
-@router.callback_query(
-    IsUserCommand(command='dollar'), StateFilter(default_state)
-)
+@router.callback_query(IsUserCommand(command="dollar"), StateFilter(default_state))
 async def get_dollar_price(callback: CallbackQuery):
     await callback.answer()
     await show_dollar_rate(callback)

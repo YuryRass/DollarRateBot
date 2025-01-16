@@ -23,18 +23,17 @@ async def command_start(message: Message):
     # если пользователь уже зареган, то заменяем
     # клавишу |Зарегистрироваться| на |Удалить аккаунт|
     if await UserCrud.is_user_registered(message.from_user.id):
-        main_keyboard = get_main_keyboard('register')
+        main_keyboard = get_main_keyboard("register")
     else:  # противоположная замена
         main_keyboard = get_main_keyboard()
     await message.answer(
-        text=f'<b>Рад Вас видеть, {message.from_user.full_name}!</b>\n\n' +
-        LEXICON['/start'],
+        text=(
+            f"<b>Рад Вас видеть, {message.from_user.full_name}!</b>\n\n{LEXICON['/start']}"
+        ),
         reply_markup=main_keyboard,
     )
 
 
-@router.message(Command(commands='help'), StateFilter(default_state))
+@router.message(Command(commands="help"), StateFilter(default_state))
 async def command_help(message: Message):
-    await message.answer(
-        text=LEXICON['/help']
-    )
+    await message.answer(text=LEXICON["/help"])

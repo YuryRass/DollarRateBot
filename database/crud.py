@@ -14,8 +14,7 @@ class BaseCrud:
 
     @classmethod
     async def find_one_or_none(cls, **filter_by):
-        """Возвращает один либо пустой объект модели
-        """
+        """Возвращает один либо пустой объект модели."""
         query = select(cls.model).filter_by(**filter_by)
         async with async_session() as session:
             res = await session.execute(query)
@@ -23,8 +22,7 @@ class BaseCrud:
 
     @classmethod
     async def add(cls, object):
-        """Добавляет объект в модель
-        """
+        """Добавляет объект в модель."""
         session: AsyncSession
         async with async_session() as session:
             session.add(object)
@@ -32,7 +30,7 @@ class BaseCrud:
 
 
 class UserCrud(BaseCrud):
-    """Операции для модели Users"""
+    """Операции для модели Users."""
 
     model = Users
 
@@ -46,8 +44,7 @@ class UserCrud(BaseCrud):
         Returns:
             bool: True, если пользователь существует
         """
-        user: Users | None = \
-            await cls.find_one_or_none(telegram_id=user_tg_id)
+        user: Users | None = await cls.find_one_or_none(telegram_id=user_tg_id)
         return user is not None
 
     @classmethod
@@ -60,10 +57,7 @@ class UserCrud(BaseCrud):
         Returns:
             bool: True, если зареган
         """
-        user: Users = \
-            await cls.find_one_or_none(
-                telegram_id=user_tg_id
-            )
+        user: Users = await cls.find_one_or_none(telegram_id=user_tg_id)
         return user.full_name is not None
 
     @classmethod
@@ -85,28 +79,21 @@ class UserCrud(BaseCrud):
             user_tg_id (int): Telegram ID пользователя
             full_name (str): ФИО пользователя
         """
-        user: Users = \
-            await cls.find_one_or_none(telegram_id=user_tg_id)
+        user: Users = await cls.find_one_or_none(telegram_id=user_tg_id)
         user.full_name = full_name
         await cls.add(user)
 
     @classmethod
-    async def save_dollar_price(
-        cls, user_tg_id: int, dollar_price: float
-    ) -> None:
+    async def save_dollar_price(cls, user_tg_id: int, dollar_price: float) -> None:
         """Сохраняет данные о курсе доллара в таблице
 
         Args:
             user_tg_id (int): Telegram ID пользователя
             dollar_price (float): цена 1 доллара в рублях
         """
-        user: Users = \
-            await cls.find_one_or_none(telegram_id=user_tg_id)
+        user: Users = await cls.find_one_or_none(telegram_id=user_tg_id)
         user.histories.append(
-            DollarHistory(
-                date_time=datetime.now(),
-                cost_value=dollar_price
-            )
+            DollarHistory(date_time=datetime.now(), cost_value=dollar_price)
         )
         await cls.add(user)
 
@@ -120,15 +107,12 @@ class UserCrud(BaseCrud):
         Returns:
             list[DollarHistory]
         """
-        user: Users = \
-            await cls.find_one_or_none(telegram_id=user_tg_id)
+        user: Users = await cls.find_one_or_none(telegram_id=user_tg_id)
 
         return user.histories
 
     @classmethod
-    async def add_subscription(
-        cls, user_tg_id: int, is_subscribe: bool = True
-    ) -> None:
+    async def add_subscription(cls, user_tg_id: int, is_subscribe: bool = True) -> None:
         """Изменяет информацию о подписке пользователя
 
         Args:
@@ -136,8 +120,7 @@ class UserCrud(BaseCrud):
             is_subscribe (bool, optional): есть ли у пользователя подписка.
         Defaults to True.
         """
-        user: Users = \
-            await cls.find_one_or_none(telegram_id=user_tg_id)
+        user: Users = await cls.find_one_or_none(telegram_id=user_tg_id)
         user.is_subscribe = is_subscribe
 
         await cls.add(user)
@@ -150,23 +133,20 @@ class UserCrud(BaseCrud):
             user_tg_id (int): Telegram ID пользователя
 
         """
-        user: Users | None = \
-            await cls.find_one_or_none(
-                telegram_id=user_tg_id,
-                is_subscribe=True
-            )
+        user: Users | None = await cls.find_one_or_none(
+            telegram_id=user_tg_id, is_subscribe=True
+        )
         return user is not None
 
     @classmethod
     async def delete_account(cls, user_tg_id: int) -> None:
         """Удаляет аккаунт пользователя, т.е. удаляет из таблицы
-    его данные о подписке и ФИО
+        его данные о подписке и ФИО
 
-        Args:
-            user_tg_id (int): Telegram ID пользователя
+            Args:
+                user_tg_id (int): Telegram ID пользователя
         """
-        user: Users = \
-            await cls.find_one_or_none(telegram_id=user_tg_id)
+        user: Users = await cls.find_one_or_none(telegram_id=user_tg_id)
         user.full_name = None
         user.is_subscribe = False
 

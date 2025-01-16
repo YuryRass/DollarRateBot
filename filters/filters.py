@@ -19,17 +19,18 @@ class IsUserCommand(BaseFilter):
 class IsPaginatorBtn(BaseFilter):
     async def __call__(self, callback: CallbackQuery) -> bool | dict[str, int]:
         paginator: int
-        if 'paginator' in callback.data:
-            paginator = int(callback.data.split('_')[1])
-            return {'paginator': paginator}
+        if "paginator" in callback.data:
+            paginator = int(callback.data.split("_")[1])
+            return {"paginator": paginator}
 
 
 class IsNotCallBack(BaseFilter):
     async def __call__(self, callback: CallbackQuery) -> bool:
-        return callback.data == 'not_call'
+        return callback.data == "not_call"
 
 
 class IsUserSubscribed(BaseFilter):
     async def __call__(self, message: Message) -> bool:
-        return message.text == '/begin' and \
-            await UserCrud.is_user_subscribed(message.from_user.id)
+        return message.text == "/begin" and await UserCrud.is_user_subscribed(
+            message.from_user.id
+        )
