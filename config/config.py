@@ -1,5 +1,7 @@
 """Модуль настроек"""
 
+from typing import Literal
+
 from pydantic import HttpUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -7,6 +9,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     """Данные, считывающиеся из файла .env"""
 
+    BOT_VERSION: Literal["1", "2"]
     BOT_TOKEN: str
     PAYMENTS_TOKEN: str
     URL: HttpUrl  # адрес API с курсом валют

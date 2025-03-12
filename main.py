@@ -6,8 +6,6 @@ import logging
 from aiogram import Bot
 from aiogram.client.telegram import TelegramAPIServer
 
-from bot.v1.init_dp import dispatcher
-from bot.v1.utils.main_menu import set_main_menu
 from config import settings
 from database.database import create_tables
 
@@ -31,6 +29,14 @@ async def main():
         bot.session.api = TelegramAPIServer.from_base(
             settings.CUSTOM_BOT_API, is_local=True
         )
+
+    if settings.BOT_VERSION == "1":
+        from bot.v1.init_dp import dispatcher
+        from bot.v1.utils.main_menu import set_main_menu
+    else:
+        ...
+        # from bot.v2.init_dp import dispatcher
+        # from bot.v2.utils.main_menu import set_main_menu
 
     await set_main_menu(bot)
 
