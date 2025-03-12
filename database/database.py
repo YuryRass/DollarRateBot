@@ -42,9 +42,3 @@ def connection(method):
                 await session.close()
 
     return wrapper
-
-
-async def create_tables() -> None:
-    """Создание таблиц БД"""
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)

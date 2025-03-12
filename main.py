@@ -4,10 +4,10 @@ import asyncio
 import logging
 
 from aiogram import Bot
+from aiogram.client.default import DefaultBotProperties
 from aiogram.client.telegram import TelegramAPIServer
 
 from config import settings
-from database.database import create_tables
 
 
 async def main():
@@ -16,12 +16,10 @@ async def main():
         level=logging.WARNING,
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
     )
-    # Создание таблиц, если БД пустая
-    await create_tables()
 
     bot: Bot = Bot(
         token=settings.BOT_TOKEN,
-        parse_mode='HTML'
+        default=DefaultBotProperties(parse_mode="HTML"),
     )
     # Если указан адрес в переменной CUSTOM_BOT_API в файле .env,
     # то запускаем Local Telegram API Server
