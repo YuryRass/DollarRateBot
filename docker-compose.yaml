@@ -9,7 +9,7 @@ services:
     env_file:
       - .env.docker
     restart: unless-stopped
-    command: python3 bot.py
+    command: python3 main.py
     depends_on:
       - db
   db:
