@@ -1,6 +1,7 @@
 """Запрос к публичному API для получения курса доллара"""
 
 from aiohttp import ClientSession
+
 from config import settings
 
 

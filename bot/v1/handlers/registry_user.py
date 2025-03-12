@@ -1,15 +1,14 @@
 """Регистрация пользователя"""
 
 from aiogram import Router
-from aiogram.types import CallbackQuery, Message
-from aiogram.fsm.state import StatesGroup, State, default_state
-from aiogram.fsm.context import FSMContext
 from aiogram.filters import Command, StateFilter
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup, default_state
+from aiogram.types import CallbackQuery, Message
 
-from filters import IsUserCommand
-from database import UserCrud
-from utils.checker_fio import is_correct_fullname
-
+from bot.v1.filters.filters import IsUserCommand
+from bot.v1.utils.checker_fio import is_correct_fullname
+from services.user import UserService
 
 router: Router = Router()
 
@@ -19,7 +18,7 @@ class UserStates(StatesGroup):
 
 
 async def _user_register(info: Message | CallbackQuery, state: FSMContext):
-    user_reg: bool = await UserCrud.is_user_registered(info.from_user.id)
+    user_reg: bool = await UserService.is_user_registered(info.from_user.id)
     if isinstance(info, CallbackQuery):
         info = info.message
     if user_reg:
@@ -48,7 +47,7 @@ async def user_registry(callback: CallbackQuery, state: FSMContext):
 async def input_full_name(message: Message, state: FSMContext):
     full_name: str = message.text
     if is_correct_fullname(full_name):
-        await UserCrud.add_user_fullname(message.from_user.id, full_name)
+        await UserService.add_user_fullname(message.from_user.id, full_name)
         await message.answer(
             text=(
                 "Поздравляю! Теперь Вы зарегестрированы и "

@@ -2,7 +2,8 @@
 
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-from lexicon import LEXICON
+
+from bot.v1.lexicon import LEXICON
 
 
 def get_main_keyboard(extra_btn: str = "unregister") -> InlineKeyboardMarkup:

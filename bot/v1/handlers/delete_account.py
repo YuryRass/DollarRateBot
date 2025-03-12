@@ -1,15 +1,14 @@
 """Удаление аккаунта"""
 
 from aiogram import Router
-from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command, StateFilter
-from aiogram.fsm.state import StatesGroup, State, default_state
 from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup, default_state
+from aiogram.types import CallbackQuery, Message
 
-from database import UserCrud
-from keyboards import get_yes_no_keyboard
-from filters import IsUserCommand
-
+from bot.v1.filters.filters import IsUserCommand
+from bot.v1.keyboards import get_yes_no_keyboard
+from services.user import UserService
 
 router: Router = Router()
 
@@ -47,6 +46,6 @@ async def delete_user_account(callback: CallbackQuery, state: FSMContext):
         await callback.message.answer(text="Ну и правильно!")
     # yes
     else:
-        await UserCrud.delete_account(callback.from_user.id)
+        await UserService.delete_account(callback.from_user.id)
         await callback.message.answer(text="Ваш аккаунт удалён!")
     await state.clear()

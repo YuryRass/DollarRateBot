@@ -3,23 +3,19 @@
 """
 
 import asyncio
-import pytz
 from datetime import datetime
-from aiogram import Router, F
-from aiogram.types import (
-    CallbackQuery,
-    Message,
-    LabeledPrice,
-    PreCheckoutQuery,
-    ContentType,
-)
-from aiogram.fsm.state import default_state
-from aiogram.filters import Command, StateFilter
 
-from filters import IsUserCommand, IsUserSubscribed
-from database import UserCrud
-from api_requests import DollarConverter
+import pytz
+from aiogram import F, Router
+from aiogram.filters import Command, StateFilter
+from aiogram.fsm.state import default_state
+from aiogram.types import (CallbackQuery, ContentType, LabeledPrice, Message,
+                           PreCheckoutQuery)
+
+from bot.v1.filters.filters import IsUserCommand, IsUserSubscribed
 from config import settings
+from services.dollar_rate import DollarRateService
+from services.user import UserService
 
 DAY = 24 * 60 * 60
 router: Router = Router()
@@ -32,10 +28,10 @@ async def _user_subscription(info: Message | CallbackQuery):
     user_tg_id: int = info.from_user.id
     if isinstance(info, CallbackQuery):
         info = info.message
-    if await UserCrud.is_user_subscribed(user_tg_id):
+    if await UserService.is_user_subscribed(user_tg_id):
         await info.answer(text="У вас уже есть подписка!")
         return
-    if not await UserCrud.is_user_registered(user_tg_id):
+    if not await UserService.is_user_registered(user_tg_id):
         await info.answer(
             text=("Вы не зарегистрированы!\n" "Для регистрации используйте /register")
         )
@@ -81,15 +77,17 @@ async def successful_payment(message: Message):
             "/begin - начать оповещения"
         )
     )
-    await UserCrud.add_subscription(message.from_user.id)
+    await UserService.add_subscription(message.from_user.id)
 
 
 @router.message(IsUserSubscribed())
 async def regular_dollar_rate(message: Message):
     while True:
-        if not await UserCrud.is_user_subscribed(message.from_user.id):
+        if not await UserService.is_user_subscribed(message.from_user.id):
             break
-        dollar_price: float = await DollarConverter.get_price()
+        dollar_price = await DollarRateService.get_and_save_dollar_rate(
+            message.from_user.id
+        )
         await message.answer(
             text=(
                 f"Курс доллара: {dollar_price} руб.\n"
@@ -97,7 +95,6 @@ async def regular_dollar_rate(message: Message):
                 f"в {datetime.now(pytz.timezone('Europe/Moscow')).strftime('%H:%M')} по мск."
             )
         )
-        await UserCrud.save_dollar_price(message.from_user.id, dollar_price)
 
         # засыпаем на сутки
         await asyncio.sleep(DAY)

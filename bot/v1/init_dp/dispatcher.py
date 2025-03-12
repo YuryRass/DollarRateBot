@@ -2,14 +2,13 @@
 
 from aiogram import Dispatcher
 
-import handlers.other_handlers as other_hdrs
-import handlers.dollar_price as dollar_hdr
-import handlers.registry_user as reg_hdr
-import handlers.user_history as history_hdr
-import handlers.user_subscription as subscr_hdr
-import handlers.cancel_subscription as cancel_hdr
-import handlers.delete_account as del_account_hdr
-
+import bot.v1.handlers.cancel_subscription as cancel_hdr
+import bot.v1.handlers.delete_account as del_account_hdr
+import bot.v1.handlers.dollar_price as dollar_hdr
+import bot.v1.handlers.other_handlers as other_hdrs
+import bot.v1.handlers.registry_user as reg_hdr
+import bot.v1.handlers.user_history as history_hdr
+import bot.v1.handlers.user_subscription as subscr_hdr
 
 dispatcher: Dispatcher = Dispatcher()
 

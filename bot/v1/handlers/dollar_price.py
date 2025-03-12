@@ -1,20 +1,18 @@
 """Значение курса доллара (в рублях)"""
 
 from aiogram import Router
-from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.state import default_state
-from api_requests import DollarConverter
-from database import UserCrud
-from filters import IsUserCommand
+from aiogram.types import CallbackQuery, Message
 
+from bot.v1.filters.filters import IsUserCommand
+from services.dollar_rate import DollarRateService
 
 router: Router = Router()
 
 
 async def show_dollar_rate(info: Message | CallbackQuery) -> None:
-    dollar_price: float = await DollarConverter.get_price()
-    await UserCrud.save_dollar_price(info.from_user.id, dollar_price)
+    dollar_price = await DollarRateService.get_and_save_dollar_rate(info.from_user.id)
     if isinstance(info, CallbackQuery):
         info = info.message
     await info.answer(text=f"Курс доллара: {dollar_price} руб.")

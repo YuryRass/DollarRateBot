@@ -6,11 +6,10 @@ import logging
 from aiogram import Bot
 from aiogram.client.telegram import TelegramAPIServer
 
-from init_dp import dispatcher
-from utils.main_menu import set_main_menu
-from database import create_tables
-
+from bot.v1.init_dp import dispatcher
+from bot.v1.utils.main_menu import set_main_menu
 from config import settings
+from database.database import create_tables
 
 
 async def main():

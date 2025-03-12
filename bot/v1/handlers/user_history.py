@@ -1,21 +1,22 @@
 """История пользовательских запросов о курсах доллара"""
 
 from aiogram import Router
-from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.state import default_state
+from aiogram.types import CallbackQuery, InlineKeyboardMarkup, Message
 
-from database import UserCrud
-from filters import IsPaginatorBtn, IsUserCommand, IsNotCallBack
+from bot.v1.filters.filters import IsNotCallBack, IsPaginatorBtn, IsUserCommand
+from bot.v1.keyboards import get_history_keyboard
 from database.models import DollarHistory
-from keyboards import get_history_keyboard
-
+from services.user import UserService
 
 router: Router = Router()
 
 
 async def _get_user_history(info: Message | CallbackQuery):
-    histories: list[DollarHistory] = await UserCrud.get_user_history(info.from_user.id)
+    histories: list[DollarHistory] = await UserService.get_user_history(
+        info.from_user.id
+    )
 
     history_kb: InlineKeyboardMarkup = get_history_keyboard(histories)
 
@@ -40,7 +41,7 @@ async def show_user_history(callback: CallbackQuery):
 
 @router.callback_query(IsPaginatorBtn())
 async def paginate_pages(callback: CallbackQuery, paginator: int):
-    histories: list[DollarHistory] = await UserCrud.get_user_history(
+    histories: list[DollarHistory] = await UserService.get_user_history(
         callback.from_user.id
     )
 

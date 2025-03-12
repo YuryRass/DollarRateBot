@@ -3,7 +3,7 @@
 from aiogram.filters import BaseFilter
 from aiogram.types import CallbackQuery, Message
 
-from database import UserCrud
+from services.user import UserService
 
 
 class IsUserCommand(BaseFilter):
@@ -31,6 +31,6 @@ class IsNotCallBack(BaseFilter):
 
 class IsUserSubscribed(BaseFilter):
     async def __call__(self, message: Message) -> bool:
-        return message.text == "/begin" and await UserCrud.is_user_subscribed(
+        return message.text == "/begin" and await UserService.is_user_subscribed(
             message.from_user.id
         )
