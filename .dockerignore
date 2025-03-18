@@ -4,3 +4,6 @@ venv/
 
 # VSCode
 .vscode/
+postgresql/
+readme_images/
+clo-1.4.86/

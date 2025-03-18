@@ -106,3 +106,5 @@ ENV/
 migrations
 
 .vscode/
+clo-1.4.86/
+*.pem
