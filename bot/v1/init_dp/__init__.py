@@ -1,1 +1,0 @@
-from bot.v1.init_dp.dispatcher import dispatcher
