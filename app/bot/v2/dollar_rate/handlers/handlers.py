@@ -11,9 +11,9 @@ from aiogram_dialog import DialogManager, ShowMode, StartMode
 from aiogram_dialog.widgets.input import ManagedTextInput
 from aiogram_dialog.widgets.kbd import Button
 
-from app.bot.v2.create_bot import BOT
+from app.bot.v2.dollar_rate.schema import STelegramMessage
 from app.bot.v2.dollar_rate.state import DollarRateState
-from app.config.config import settings
+from app.config.config import rabbit_broker, settings
 from app.services.dollar_rate import DollarRateService
 from app.services.user import UserService
 
@@ -133,9 +133,11 @@ async def successful_payment(
         )
     )
     await UserService.add_subscription(message.from_user.id)
-    await BOT.send_message(
-        chat_id=message.chat.id, text="Здесь скоро будет периодическая отправка!!!"
-    )
+    msg_json = STelegramMessage(
+        chat_id=message.chat.id,
+        user_tg_id=message.from_user.id,
+    ).model_dump_json()
+    await rabbit_broker.publish(message=msg_json, queue=settings.DOLLAR_RATE_QUEUE)
 
 
 # TODO периодическая задача
