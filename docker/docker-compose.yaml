@@ -1,4 +1,3 @@
-version: '3'
 services:
 
   db:
@@ -12,7 +11,31 @@ services:
       - POSTGRES_DB=${DB_NAME}
     volumes:
       - psqldata:/var/lib/postgresql/data
+    networks:
+      - my_network
+
+  rabbitmq:
+    image: "rabbitmq:3-management-alpine"
+    container_name: rabbitmq
+    env_file:
+      - .env
+    ports:
+      - ${RABBITMQ_DEFAULT_PORT}:${RABBITMQ_DEFAULT_PORT}  # AMQP протокол
+      - ${WEB_RABBIT_PORT}:${WEB_RABBIT_PORT}  # Веб-интерфейс RabbitMQ
+    volumes:
+        - rabbitmq_data:/var/lib/rabbitmq/
+        - rabbitmq_log:/var/log/rabbitmq
+    networks:
+      - my_network
 
 volumes:
   psqldata:
     driver: local
+  rabbitmq_data:
+    driver: local
+  rabbitmq_log:
+    driver: local
+
+networks:
+  my_network:
+    name: my_network
