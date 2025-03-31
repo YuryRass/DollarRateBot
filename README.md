@@ -6,6 +6,8 @@
 
 Информация о курсах доллара берется из следующего [источника](https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=RUB)
 
+## Первая версия программы
+
 Зависимости программы: SQLAlchemy[async], aiohttp, pydantic, asyncpg, AIOgram, python-dotenv
 
 Взаимодейстовать с Телеграм-ботом можно двумя способами:
@@ -35,6 +37,9 @@ Telegram пользователь имеет возможность оформи
 
 Оформление подписки осуществялется через онлаин-оплату. После оплаты Telegram-пользователь может запустить ежедневные оповещения о курсе доллара, применив команду `/begin`
 
+## Вторая версия программы
+скоро здесь будет описание...
+
 # Стартовая конфигурация
 
 Перед запуском Телеграм-бота убедитесь в наличии в директории с проектом файла ".env", хранящего следующие настройки:
@@ -55,8 +60,22 @@ Telegram пользователь имеет возможность оформи
   > Пароль для пользователя в PostgreSQL
 * **DB_NAME** = dollar_rate
   > Имя базы данных PostgreSQL
+* **RABBITMQ_USERNAME** = user
+  > Имя пользователя в RabbitMQ
+* **RABBITMQ_PASSWORD** = password
+  > Пароль для пользователя в RabbitMQ
+* **RABBITMQ_HOST** = host
+  > Имя сервера где расположен RabbitMQ
+* **RABBITMQ_PORT** = 5672
+  > Порт для RabbitMQ
 * **CUSTOM_BOT_API** = http://localhost:8081
   > URL адрес, где будет запущен [Local Bot API Server](ttps://core.telegram.org/bots/api#using-a-local-bot-api-server)
+* **URL_WEBHOOK** = https://
+  > URL адрес вебхука
+* **SHEDULER_SENDING_DOLLAR_RATE_PREFIX** = prefix
+  > Префикс для scheduler-задач при присваивании задачам имени
+* **DOLLAR_RATE_QUEUE** = q__dollar_rate
+  > Название очереди для периодической отправки курса доллара
 
 # Установка и запуск
 ## Локальный сервер
@@ -71,23 +90,19 @@ git clone https://github.com/YuryRass/DollarRateBot.git
 pip3 install -r requirements.txt
 ```
 
-Перед запуском Телеграм-бота у вас должна быть база данных PostgreSQL с названием **DB_NAME**
+Перед запуском Телеграм-бота у вас должна быть база данных PostgreSQL с названием **DB_NAME** и брокер сообщений RabbitMQ по адресу **RABBITMQ_HOST** (для второй версии телеграм бота)
 
-Если у Вас нет базы данных PostgreSQL, то можно создать и запустить её в docker-контейнере, предварительно заполнив файл `./postgresql/.env`
+Если у Вас нет базы данных PostgreSQL и брокера RabbitMQ, то можно создать и запустить их в docker-контейнере, предварительно заполнив файл `./docker/.env`
 ```
-docker-compose -f postgresql/docker-compose.yaml up --build
+docker-compose -f docker/docker-compose.yaml up --build
 ```
-Запуск Телеграм-бота **DollarRateBot**:
+Запуски Телеграм-бота **DollarRateBot**:
 ```
-python3 bot.py
+uvicorn app.main_v1:app -> 1 версия
+
+uvicorn app.main_v2:app -> 2 версия
 ```
 
-## Docker-Compose
-
-Запуск программного средства **DollarRateBot** в docker-контейнерах:
-```
-docker-compose up --build
-```
 
 # Способы расширения базы Telegram пользователей
 
