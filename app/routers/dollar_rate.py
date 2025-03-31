@@ -16,6 +16,7 @@ async def periodic_sending_dollar_rate(message_json: str) -> None:
     message = STelegramMessage.model_validate_json(json_data=message_json)
     current_datetime = datetime.now().replace(hour=23, minute=59, second=59)
     job_id = f"{settings.SHEDULER_SENDING_DOLLAR_RATE_PREFIX}_{message.chat_id}_{message.user_tg_id}"
+    await sending_dollar_rate(message_json)
     scheduler.add_job(
         sending_dollar_rate,
         args=[message_json],

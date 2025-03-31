@@ -10,7 +10,6 @@ from app.bot.v1.create_bot import BOT
 from app.bot.v1.init_dp import dispatcher
 from app.bot.v1.utils.main_menu import set_main_menu
 from app.config.config import settings
-from app.routers.dollar_rate import router as router_fast_stream
 
 WEBHOOK_PATH = f"/bot/{settings.BOT_TOKEN}"
 
@@ -44,5 +43,3 @@ async def webhook(request: Request) -> None:
         logger.info("Обновление успешно обработано.")
     except Exception as exc:
         logger.error(f"Ошибка при обработке обновления с вебхука: {exc}")
-
-app.include_router(router_fast_stream)
