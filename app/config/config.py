@@ -29,6 +29,9 @@ class Settings(BaseSettings):
     RABBITMQ_HOST: str
     RABBITMQ_PORT: int
 
+    # Scheduler store
+    STORE_URL: str = "sqlite:///data/jobs.sqlite"
+
     # http://localhost:8081
     CUSTOM_BOT_API: str | None
     URL_WEBHOOK: str
