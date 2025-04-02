@@ -16,7 +16,7 @@
 
 ![](./readme_images/inline_kb.png)
 
-1. Через команды пользовательского Telegram меню:
+2. Через команды пользовательского Telegram меню:
 
 ![](./readme_images/user_commands.png)
 
