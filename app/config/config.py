@@ -38,6 +38,9 @@ class Settings(BaseSettings):
     SHEDULER_SENDING_DOLLAR_RATE_PREFIX: str = "sending_dollar_rate"
     DOLLAR_RATE_QUEUE: str = "q__dollar_rate"
 
+    # NATS key/value
+    NATS_SERVERS: str
+
     @property
     def DATABASE_URL(self):
         """Адрес PostgreSQL базы данных"""
