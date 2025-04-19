@@ -9,7 +9,7 @@ from loguru import logger
 
 from app.bot.v2.create_bot import BOT
 from app.bot.v2.init_dp.dispatcher import get_dispatcher
-from app.bot.v2.nats_storage.storage import get_nats_storage
+from app.bot.v2.nats_storage.storage import get_nats_client_and_storage
 from app.config.config import rabbit_broker, settings
 from app.routers.dollar_rate import router as router_fast_stream
 from app.scheduler.scheduler import scheduler
@@ -25,7 +25,7 @@ async def lifespan(app: FastAPI):
     logger.success("Брокер RabbitMQ запущен...")
     webhook_link = f"{settings.URL_WEBHOOK}{WEBHOOK_PATH}"
 
-    storage = await get_nats_storage()
+    nats_client, storage = await get_nats_client_and_storage()
     dispatcher = get_dispatcher(storage=storage)
     app.state.dispatcher = dispatcher
     logger.success("Хранилище Nats создано...")
@@ -41,6 +41,7 @@ async def lifespan(app: FastAPI):
     logger.info("Бот остановлен...")
     await rabbit_broker.close()
     scheduler.shutdown()
+    await nats_client.close()
     await BOT.delete_webhook()
 
 

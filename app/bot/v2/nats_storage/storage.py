@@ -85,6 +85,7 @@ class NatsStorage(BaseStorage):
         await self.nc.close()
 
 
-async def get_nats_storage() -> NatsStorage:
+async def get_nats_client_and_storage() -> tuple[Client, NatsStorage]:
     nc, js = await connect_to_nats(servers=[settings.NATS_SERVERS])
-    return await NatsStorage(nc=nc, js=js).create_storage()
+    storage = await NatsStorage(nc=nc, js=js).create_storage()
+    return nc, storage
