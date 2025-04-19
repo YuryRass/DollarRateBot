@@ -38,7 +38,7 @@ Telegram пользователь имеет возможность оформи
 Оформление подписки осуществялется через онлаин-оплату. После оплаты Telegram-пользователь может запустить ежедневные оповещения о курсе доллара, применив команду `/begin`
 
 ## Вторая версия программы
-Зависимости программы: SQLAlchemy[async], aiohttp, pydantic, asyncpg, AIOgram, faststream, FastAPI, Aiogram-Dialog, uvicorn, APScheduler, aiormq
+Зависимости программы: SQLAlchemy[async], aiohttp, pydantic, asyncpg, AIOgram, faststream, FastAPI, Aiogram-Dialog, uvicorn, APScheduler, aiormq, nats-py
 
 Взаимодейстовать с Телеграм-ботом можно через инлаин-клавиатуру, созданную через AIOGram-Dialog:
 
@@ -59,6 +59,7 @@ Telegram пользователь имеет возможность оформи
 Оформление подписки осуществялется через онлаин-оплату. После оплаты автоматически запускаются ежедневные оповещения о курсе доллара с использованием `APScheduler` и брокера сообщений `RabbitMQ`
 ![](./readme_images/dollar_rate_subscribe_v2.png)
 
+В качестве FSM хранилища типа ключ-значение для телеграм бота выбран `NATS JetStream`
 
 # Стартовая конфигурация
 
