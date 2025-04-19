@@ -21,7 +21,7 @@ async def periodic_sending_dollar_rate(message_json: str) -> None:
         sending_dollar_rate,
         args=[message_json],
         trigger="interval",
-        seconds=5,
+        days=1,
         end_date=current_datetime + timedelta(days=30),
         id=job_id,
         replace_existing=True,
