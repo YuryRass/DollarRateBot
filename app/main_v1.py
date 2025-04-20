@@ -7,7 +7,7 @@ from fastapi import FastAPI, Request
 from loguru import logger
 
 from app.bot.v1.create_bot import BOT
-from app.bot.v1.init_dp import dispatcher
+from app.bot.v1.init_dp.dispatcher import dispatcher
 from app.bot.v1.utils.main_menu import set_main_menu
 from app.config.config import settings
 
