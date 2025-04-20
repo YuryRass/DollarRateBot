@@ -31,3 +31,5 @@ LEXICON_COMMANDS_RU: dict[str, str] = {
     "/begin": "Начать оповещения о курсе доллара",
     "/cancel_subscr": "Отменить подписку",
 }
+
+START_MESSAGE = "<b>Рад Вас видеть, {user_full_name}!</b>\n\n{msg}"
