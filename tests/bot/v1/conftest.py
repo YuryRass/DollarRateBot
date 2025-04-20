@@ -30,9 +30,12 @@ async def create_tables():
 
 
 @pytest.fixture(autouse=True)
-async def tg_user() -> None:
+async def registered_user() -> None:
     async with scoped_session() as db:
-        user = UserFactory(histories=DollarHistoryFactory.create_batch(3))
+        user = UserFactory(
+            full_name="Иванов Иван Иванович",
+            histories=DollarHistoryFactory.create_batch(3),
+        )
         db.add(user)
         await db.commit()
 
