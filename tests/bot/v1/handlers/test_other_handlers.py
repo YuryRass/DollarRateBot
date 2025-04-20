@@ -14,7 +14,7 @@ from tests.bot.mocked_aiogram import MockedBot
 
 
 @pytest.mark.parametrize("tg_command", ["/help", "/start"])
-async def test_commands(tg_command: str, dp: Dispatcher, bot: MockedBot) -> None:
+async def test_basic_commands(tg_command: str, dp: Dispatcher, bot: MockedBot) -> None:
     assert not bot.session.requests
     bot.add_result_for(
         method=SendMessage,
