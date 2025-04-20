@@ -7,6 +7,7 @@ from aiogram.types import InlineKeyboardMarkup, Message
 
 from app.bot.v1.keyboards import get_main_keyboard
 from app.bot.v1.lexicon import LEXICON
+from app.bot.v1.lexicon.lexicon import START_MESSAGE
 from app.services.user import UserService
 
 router: Router = Router()
@@ -27,7 +28,9 @@ async def command_start(message: Message):
         main_keyboard = get_main_keyboard()
     await message.answer(
         text=(
-            f"<b>Рад Вас видеть, {message.from_user.full_name}!</b>\n\n{LEXICON['/start']}"
+            START_MESSAGE.format(
+                user_full_name=message.from_user.full_name, msg=LEXICON["/start"]
+            )
         ),
         reply_markup=main_keyboard,
     )
