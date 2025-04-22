@@ -1,10 +1,3 @@
-"""
-This file is taken from
-https://github.com/aiogram/aiogram/blob/dev-3.x/tests/mocked_bot.py
-(commit 74e00a30b12a2adb47237079bb554f15755ec604)
-with slight modifications
-"""
-
 from collections import deque
 from collections.abc import AsyncGenerator
 from typing import TYPE_CHECKING, Any, Deque
@@ -23,12 +16,14 @@ class MockedSession(BaseSession):
         self.requests: Deque[TelegramMethod[TelegramType]] = deque()
         self.closed = True
 
-    def add_result(self, response: Response[TelegramType]) -> Response[TelegramType]:
+    def add_result(
+        self, response: Response[TelegramType]
+    ) -> Response[TelegramType]:
         self.responses.append(response)
         return response
 
     def get_request(self) -> TelegramMethod[TelegramType]:
-        return self.requests.popleft()
+        return self.requests.pop()
 
     async def close(self):
         self.closed = True
@@ -41,7 +36,7 @@ class MockedSession(BaseSession):
     ) -> TelegramType:
         self.closed = False
         self.requests.append(method)
-        response: Response[TelegramType] = self.responses.popleft()
+        response: Response[TelegramType] = self.responses.pop()
         self.check_response(
             bot=bot,
             method=method,
@@ -72,10 +67,10 @@ class MockedBot(Bot):
         self._me = User(
             id=self.id,
             is_bot=True,
-            first_name="BotName",
-            last_name="BotSurname",
-            username="bot",
-            language_code="en-US",
+            first_name="FirstName",
+            last_name="LastName",
+            username="tbot",
+            language_code="ru-RU",
         )
 
     def add_result_for(
